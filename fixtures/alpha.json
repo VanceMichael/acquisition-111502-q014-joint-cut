@@ -1,0 +1,24 @@
+{
+  "source": "alpha",
+  "complete": true,
+  "versions": [
+    {
+      "version": "1",
+      "href": "/sources/alpha/versions/1",
+      "requires": {
+        "beta": [
+          "1"
+        ]
+      }
+    },
+    {
+      "version": "2",
+      "href": "/sources/alpha/versions/2",
+      "requires": {
+        "beta": [
+          "2"
+        ]
+      }
+    }
+  ]
+}

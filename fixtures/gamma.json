@@ -1,0 +1,24 @@
+{
+  "source": "gamma",
+  "complete": true,
+  "versions": [
+    {
+      "version": "1",
+      "href": "/sources/gamma/versions/1",
+      "requires": {
+        "alpha": [
+          "1"
+        ]
+      }
+    },
+    {
+      "version": "2",
+      "href": "/sources/gamma/versions/2",
+      "requires": {
+        "alpha": [
+          "1"
+        ]
+      }
+    }
+  ]
+}

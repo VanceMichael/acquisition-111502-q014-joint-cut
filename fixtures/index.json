@@ -1,0 +1,16 @@
+{
+  "participants": [
+    {
+      "source": "alpha",
+      "catalog": "/sources/alpha/catalog"
+    },
+    {
+      "source": "beta",
+      "catalog": "/sources/beta/catalog"
+    },
+    {
+      "source": "gamma",
+      "catalog": "/sources/gamma/catalog"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "/catalog": {
+    "file": "index.json",
+    "mediaType": "application/json"
+  },
+  "/sources/alpha/catalog": {
+    "file": "alpha.json",
+    "mediaType": "application/json",
+    "stages": {
+      "incompatible": {
+        "file": "alpha-only2.json"
+      },
+      "racing": {
+        "changedAfter": 2,
+        "changedFile": "alpha-only2.json"
+      }
+    }
+  },
+  "/sources/alpha/versions/1": {
+    "file": "alpha-1.json",
+    "mediaType": "application/json"
+  },
+  "/sources/alpha/versions/2": {
+    "file": "alpha-2.json",
+    "mediaType": "application/json"
+  },
+  "/sources/beta/catalog": {
+    "file": "beta.json",
+    "mediaType": "application/json",
+    "stages": {
+      "incompatible": {
+        "file": "beta-only2.json"
+      }
+    }
+  },
+  "/sources/beta/versions/1": {
+    "file": "beta-1.json",
+    "mediaType": "application/json"
+  },
+  "/sources/beta/versions/2": {
+    "file": "beta-2.json",
+    "mediaType": "application/json"
+  },
+  "/sources/gamma/catalog": {
+    "file": "gamma.json",
+    "mediaType": "application/json",
+    "stages": {
+      "incompatible": {
+        "file": "gamma-only2.json"
+      },
+      "partial": {
+        "responseStatus": 503
+      }
+    }
+  },
+  "/sources/gamma/versions/1": {
+    "file": "gamma-1.json",
+    "mediaType": "application/json"
+  },
+  "/sources/gamma/versions/2": {
+    "file": "gamma-2.json",
+    "mediaType": "application/json"
+  }
+}
