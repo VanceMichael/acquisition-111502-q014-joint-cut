@@ -3,6 +3,7 @@ import { Archive } from './archive.mjs';
 import { retrieve } from './transport.mjs';
 import { summarize } from './summary.mjs';
 import { acquireSingle } from './single-source.mjs';
+import { acquireJoint } from './joint.mjs';
 
 export function json(response, status, value) {
   response.writeHead(status, { 'content-type': 'application/json; charset=utf-8' });
@@ -31,6 +32,10 @@ export async function createService({ directory, allowedOrigin }) {
     try {
       const url = new URL(request.url, 'http://localhost');
       if (request.method === 'POST' && url.pathname === '/single-source') return json(response, 201, await acquireSingle(await requestBody(request), archive, allowedOrigin));
+      if (request.method === 'POST' && url.pathname === '/joint-acquisitions') {
+        const result = await acquireJoint(await requestBody(request), archive, allowedOrigin);
+        return json(response, result.status, result.body);
+      }
       if (request.method === 'GET' && url.pathname === '/health') return json(response, 200, { status: 'ok' });
       if (request.method === 'GET' && url.pathname === '/collections') return json(response, 200, await archive.list());
       const collection = url.pathname.match(/^\/collections\/([a-zA-Z0-9_.-]+)$/);

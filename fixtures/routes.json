@@ -13,6 +13,18 @@
       "racing": {
         "changedAfter": 2,
         "changedFile": "alpha-only2.json"
+      },
+      "cycle": {
+        "file": "alpha-cycle.json"
+      },
+      "prefer": {
+        "file": "alpha-prefer.json"
+      },
+      "incomplete": {
+        "file": "alpha-incomplete.json"
+      },
+      "payload-missing": {
+        "file": "alpha.json"
       }
     }
   },
@@ -22,7 +34,12 @@
   },
   "/sources/alpha/versions/2": {
     "file": "alpha-2.json",
-    "mediaType": "application/json"
+    "mediaType": "application/json",
+    "stages": {
+      "payload-missing": {
+        "expireAfter": -1
+      }
+    }
   },
   "/sources/beta/catalog": {
     "file": "beta.json",
@@ -30,6 +47,18 @@
     "stages": {
       "incompatible": {
         "file": "beta-only2.json"
+      },
+      "cycle": {
+        "file": "beta-cycle.json"
+      },
+      "prefer": {
+        "file": "beta-prefer.json"
+      },
+      "incomplete": {
+        "file": "beta-only2.json"
+      },
+      "payload-missing": {
+        "file": "beta-prefer.json"
       }
     }
   },
@@ -50,6 +79,18 @@
       },
       "partial": {
         "responseStatus": 503
+      },
+      "cycle": {
+        "file": "gamma-cycle.json"
+      },
+      "prefer": {
+        "file": "gamma-prefer.json"
+      },
+      "incomplete": {
+        "file": "gamma-only2.json"
+      },
+      "payload-missing": {
+        "file": "gamma-prefer.json"
       }
     }
   },

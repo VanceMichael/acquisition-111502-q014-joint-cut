@@ -124,4 +124,47 @@ export class Archive {
   async list() {
     return (await readdir(join(this.directory, 'collections'))).filter(name => name.endsWith('.json')).map(name => name.slice(0, -5));
   }
+
+  async publishJoint(collectionId, records, publication) {
+    identifier(collectionId);
+    return this.serialized(async () => {
+      const collection = await this.collection(collectionId);
+      // 联合切面是资料索引里的 source-version 视图：先前的联合发表记录以及
+      // 早先单方领取留下的同类记录都被本轮切面替换；其他人工记录与所有已
+      // 归档原文保持不动。
+      const kept = collection.records.filter(record => record.kind !== 'source-version');
+      for (const record of records) {
+        const match = kept.find(existing => existing.kind === record.kind && existing.key === record.key);
+        if (match && JSON.stringify(match.value) !== JSON.stringify(record.value)) {
+          throw Object.assign(new Error('record_identity_conflict'), { status: 409 });
+        }
+      }
+      collection.records = kept;
+      for (const record of records) {
+        if (!kept.some(existing => existing.kind === record.kind && existing.key === record.key)) {
+          collection.records.push({ ...record, joint: true });
+        }
+      }
+      collection.joint = { ...publication, state: 'committed' };
+      collection.issues = [];
+      delete collection.jointAttempt;
+      await this.saveJson(join(this.directory, 'collections', collectionId + '.json'), collection);
+      return collection;
+    });
+  }
+
+  async saveJointAttempt(collectionId, attempt, issues = []) {
+    identifier(collectionId);
+    return this.serialized(async () => {
+      const collection = await this.collection(collectionId);
+      collection.jointAttempt = { ...attempt, sequence: (collection.jointAttempt?.sequence || 0) + 1 };
+      // 已发表且引用其记录的联合状态不能被一次未确认的尝试覆盖；没有已发表
+      // 记录时，联合状态直接反映最近一次尝试。issues 始终说明最近一次尝试中
+      // 仍未确认的部分，不静默丢弃。
+      if (!collection.joint || collection.joint.state !== 'committed') collection.joint = attempt;
+      collection.issues = issues;
+      await this.saveJson(join(this.directory, 'collections', collectionId + '.json'), collection);
+      return collection;
+    });
+  }
 }
