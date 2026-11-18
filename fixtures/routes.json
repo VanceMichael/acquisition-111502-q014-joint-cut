@@ -1,7 +1,12 @@
 {
   "/catalog": {
     "file": "index.json",
-    "mediaType": "application/json"
+    "mediaType": "application/json",
+    "stages": {
+      "preference": {
+        "file": "index-preference.json"
+      }
+    }
   },
   "/sources/alpha/catalog": {
     "file": "alpha.json",
@@ -13,12 +18,20 @@
       "racing": {
         "changedAfter": 2,
         "changedFile": "alpha-only2.json"
+      },
+      "preference": {
+        "file": "alpha-preference.json"
       }
     }
   },
   "/sources/alpha/versions/1": {
     "file": "alpha-1.json",
-    "mediaType": "application/json"
+    "mediaType": "application/json",
+    "stages": {
+      "retired": {
+        "responseStatus": 410
+      }
+    }
   },
   "/sources/alpha/versions/2": {
     "file": "alpha-2.json",
@@ -30,6 +43,9 @@
     "stages": {
       "incompatible": {
         "file": "beta-only2.json"
+      },
+      "preference": {
+        "file": "beta-preference.json"
       }
     }
   },
@@ -59,6 +75,22 @@
   },
   "/sources/gamma/versions/2": {
     "file": "gamma-2.json",
+    "mediaType": "application/json"
+  },
+  "/sources/alpha/versions/9": {
+    "file": "alpha-9.json",
+    "mediaType": "application/json"
+  },
+  "/sources/alpha/versions/10": {
+    "file": "alpha-10.json",
+    "mediaType": "application/json"
+  },
+  "/sources/beta/versions/9": {
+    "file": "beta-9.json",
+    "mediaType": "application/json"
+  },
+  "/sources/beta/versions/10": {
+    "file": "beta-10.json",
     "mediaType": "application/json"
   }
 }

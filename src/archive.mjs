@@ -40,10 +40,11 @@ export class Archive {
   async collection(collectionId) {
     identifier(collectionId);
     try {
-      return JSON.parse(await readFile(join(this.directory, 'collections', collectionId + '.json'), 'utf8'));
+      const collection = JSON.parse(await readFile(join(this.directory, 'collections', collectionId + '.json'), 'utf8'));
+      return { joint: null, ...collection };
     } catch (error) {
       if (error.code !== 'ENOENT') throw error;
-      return { collectionId, receiptIds: [], records: [], issues: [] };
+      return { collectionId, receiptIds: [], records: [], issues: [], joint: null };
     }
   }
 
@@ -118,6 +119,30 @@ export class Archive {
       if (!match) collection.records.push(record);
       await this.saveJson(join(this.directory, 'collections', collectionId + '.json'), collection);
       return record;
+    });
+  }
+
+  // A joint round is published as one unit: its source-version records, its
+  // issues and its state move together, so the index never shows a cut whose
+  // supporting receipts or validity evidence are missing.
+  async publishJoint(collectionId, { records, joint, issues }) {
+    identifier(collectionId);
+    return this.serialized(async () => {
+      const collection = await this.collection(collectionId);
+      // A new round replaces the current joint view. Earlier receipts stay in
+      // the archive and remain retrievable, but an unconfirmed round must not
+      // leave a previously committed cut visible as if it were this round's
+      // declaration, and a source-version key has one current entry.
+      const keys = new Set(records.filter(record => record.kind === 'source-version')
+        .map(record => record.kind + '\u0000' + record.key));
+      collection.records = collection.records.filter(existing =>
+        !(existing.value && existing.value.joint === true)
+        && !(existing.kind === 'source-version' && keys.has(existing.kind + '\u0000' + existing.key)));
+      for (const record of records) collection.records.push(record);
+      collection.issues = issues;
+      collection.joint = joint;
+      await this.saveJson(join(this.directory, 'collections', collectionId + '.json'), collection);
+      return collection;
     });
   }
 

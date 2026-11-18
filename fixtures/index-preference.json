@@ -1,0 +1,6 @@
+{
+  "participants": [
+    { "source": "alpha", "catalog": "/sources/alpha/catalog" },
+    { "source": "beta", "catalog": "/sources/beta/catalog" }
+  ]
+}
